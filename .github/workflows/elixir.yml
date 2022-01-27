@@ -142,7 +142,6 @@ jobs:
     needs:
       - static_code_analysis
       - unit_tests
-      - integration_tests
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
