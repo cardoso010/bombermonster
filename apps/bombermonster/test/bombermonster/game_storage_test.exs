@@ -4,7 +4,7 @@ defmodule Bombermonster.GameStorageTest do
   alias Bombermonster.GameStorage
 
   setup do
-    player = %{id: "1234", x: 10, y: 10, color: "red"}
+    player = %{"id" => 1234, "x" => 10, "y" => 10, "color" => "red"}
 
     {:ok, player: player}
   end
@@ -15,7 +15,17 @@ defmodule Bombermonster.GameStorageTest do
 
   test "get players", ctx do
     GameStorage.add_player(ctx.player)
-    assert {:ok, players} = GameStorage.get_players()
-    assert %{"1234": %{id: _, x: _, y: _, color: _}} = players
+
+    assert %{1234 => %{"id" => _, "x" => 10, "y" => 10, "color" => "red"}} =
+             GameStorage.get_players()
+  end
+
+  test "update player", ctx do
+    GameStorage.add_player(ctx.player)
+
+    assert :ok = GameStorage.update_player(%{ctx.player | "x" => 12})
+
+    assert %{1234 => %{"id" => _, "x" => 12, "y" => 10, "color" => "red"}} =
+             GameStorage.get_players()
   end
 end
