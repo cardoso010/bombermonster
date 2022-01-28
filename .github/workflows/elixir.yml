@@ -50,6 +50,7 @@ jobs:
           mix local.hex --force
           mix deps.get
           mix deps.compile
+
   static_code_analysis:
     name: Static Code Analysis
     needs: deps
@@ -127,29 +128,3 @@ jobs:
 
       - name: Run test
         run: mix test --trace --slowest 10
-
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs:
-      - static_code_analysis
-      - unit_tests
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
-        with:
-          access_token: ${{ github.token }}
-
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Deploy to staging
-        uses: mhanberg/gigalixir-action@v0.4.0
-        with:
-          GIGALIXIR_USERNAME: ${{ secrets.GIGALIXIR_USERNAME }}
-          GIGALIXIR_PASSWORD: ${{ secrets.GIGALIXIR_PASSWORD }}
-          GIGALIXIR_APP: bombermonster
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          MIGRATIONS: false
