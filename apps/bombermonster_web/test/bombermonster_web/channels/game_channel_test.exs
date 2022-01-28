@@ -2,26 +2,18 @@ defmodule BombermonsterWeb.GameChannelTest do
   use BombermonsterWeb.ChannelCase
 
   setup do
+    player = %{"id" => 1234, "x" => 10, "y" => 10, "color" => "red"}
+
     {:ok, _, socket} =
-      BombermonsterWeb.UserSocket
-      |> socket("user_id", %{some: :assign})
-      |> subscribe_and_join(BombermonsterWeb.GameChannel, "game:lobby")
+      BombermonsterWeb.GameSocket
+      |> socket()
+      |> subscribe_and_join(BombermonsterWeb.GameChannel, "game:lobby", %{"player" => player})
 
-    %{socket: socket}
+    %{socket: socket, player: player}
   end
 
-  test "ping replies with status ok", %{socket: socket} do
-    ref = push(socket, "ping", %{"hello" => "there"})
-    assert_reply ref, :ok, %{"hello" => "there"}
-  end
-
-  test "shout broadcasts to game:lobby", %{socket: socket} do
-    push(socket, "shout", %{"hello" => "all"})
-    assert_broadcast "shout", %{"hello" => "all"}
-  end
-
-  test "broadcasts are pushed to the client", %{socket: socket} do
-    broadcast_from!(socket, "broadcast", %{"some" => "data"})
-    assert_push "broadcast", %{"some" => "data"}
+  test "move broadcasts to game:lobby", %{socket: socket, player: player} do
+    push(socket, "move", player)
+    assert_broadcast "update_players", %{1234 => ^player}
   end
 end
