@@ -41,18 +41,15 @@ jobs:
           path: |
             deps
             _build
-            priv/plts
           key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('mix.lock') }}
 
       - name: Install Dependencies
         if: steps.mix-cache.outputs.cache-hit != 'true'
         run: |
-          mkdir -p priv/plts
           mix local.rebar --force
           mix local.hex --force
           mix deps.get
           mix deps.compile
-          mix dialyzer --plt
   static_code_analysis:
     name: Static Code Analysis
     needs: deps
@@ -85,7 +82,6 @@ jobs:
           path: |
             deps
             _build
-            priv/plts
           key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('mix.lock') }}
 
       - name: Check Code Format
@@ -93,9 +89,6 @@ jobs:
 
       - name: Run Credo
         run: mix credo
-
-      - name: Run Dialyzer
-        run: mix dialyzer --no-check --halt-exit-status
 
   unit_tests:
     name: Unit Tests
@@ -130,7 +123,6 @@ jobs:
           path: |
             deps
             _build
-            priv/plts
           key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('mix.lock') }}
 
       - name: Run test
