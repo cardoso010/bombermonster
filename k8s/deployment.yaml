@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment # Name of deployments and pods
+  name: bombermonster-deployment # Name of deployments and pods
 spec:
   replicas: 3 # name of pods replicas
   selector:
     matchLabels:
-      app: nginx # name of label(template) that it will replicate
+      app: bombermonster # name of label(template) that it will replicate
   template:
     metadata:
       labels:
-        app: nginx # label name
+        app: bombermonster # label name
     spec:
       containers:
         - name: nginx
