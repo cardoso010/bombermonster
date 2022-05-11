@@ -13,7 +13,7 @@ spec:
         app: bombermonster # label name
     spec:
       containers:
-        - name: nginx
-          image: nginx:latest # Image name (nginx, caddy)
+        - name: bombermonster
+          image: cardoso010/bombermonster:latest # Image name (nginx, caddy)
           ports:
             - containerPort: 80
